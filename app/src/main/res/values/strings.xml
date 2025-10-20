@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Новости</string>
+    <string name="tab_news">Новости</string>
+    <string name="tab_favorites">Избранное</string>
+    <string name="tab_settings">Настройки</string>
+    <string name="search_label">Поиск новостей</string>
+    <string name="search_placeholder">Введите запрос (на русском можно)</string>
+</resources>
