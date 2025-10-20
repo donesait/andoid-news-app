@@ -21,18 +21,5 @@ data class SourceDto(
     val id: String?,
     val name: String?
 )
-
-// Domain models (простые, для UI)
-data class Article(
-    val id: String, // synthetic from url or title
-    val title: String,
-    val description: String,
-    val imageUrl: String?,
-    val sourceName: String,
-    val publishedAt: String,
-    val author: String?,
-    val url: String,
-    val content: String?
-)
-
+ 
 

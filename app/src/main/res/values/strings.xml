@@ -5,4 +5,7 @@
     <string name="tab_settings">Настройки</string>
     <string name="search_label">Поиск новостей</string>
     <string name="search_placeholder">Введите запрос (на русском можно)</string>
+    <string name="error_title">Произошла ошибка</string>
+    <string name="retry">Повторить</string>
+    <string name="close">Закрыть</string>
 </resources>
