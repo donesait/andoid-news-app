@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
-import com.example.myapplication.data.Article
+import com.example.myapplication.domain.Article
 
 @Composable
 fun NewsScreen(vm: NewsViewModel = viewModel(), navController: NavController? = null) {
@@ -68,7 +70,21 @@ fun NewsScreen(vm: NewsViewModel = viewModel(), navController: NavController? = 
             }
 
             state.error?.let { err ->
-                Text(text = err, color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
+                AlertDialog(
+                    onDismissRequest = { vm.dismissError() },
+                    confirmButton = {
+                        TextButton(onClick = { vm.dismissError(); vm.retry() }) {
+                            Text(text = stringResource(id = com.example.myapplication.R.string.retry))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { vm.dismissError() }) {
+                            Text(text = stringResource(id = com.example.myapplication.R.string.close))
+                        }
+                    },
+                    title = { Text(text = stringResource(id = com.example.myapplication.R.string.error_title)) },
+                    text = { Text(text = err) }
+                )
             }
         }
     }

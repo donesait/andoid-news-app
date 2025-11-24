@@ -3,7 +3,7 @@ package com.example.myapplication.feature.news
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.myapplication.data.Article
+import com.example.myapplication.domain.Article
 import com.google.gson.Gson
 import java.net.URLDecoder
 import java.net.URLEncoder

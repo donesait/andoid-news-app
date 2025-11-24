@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
-import com.example.myapplication.data.Article
+import com.example.myapplication.domain.Article
 
 @Composable
 fun NewsDetailsScreen(article: Article) {
