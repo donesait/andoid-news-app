@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -36,6 +37,9 @@ import com.example.myapplication.feature.news.NewsScreen
 import com.example.myapplication.feature.news.newsGraph
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.example.myapplication.feature.profile.navigation.PROFILE_EDIT_ROUTE
+import com.example.myapplication.feature.profile.navigation.PROFILE_ROUTE
+import com.example.myapplication.feature.profile.navigation.profileGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +56,7 @@ class MainActivity : ComponentActivity() {
 private enum class RootDestinations(val route: String, val label: String) {
     NEWS("news", "Новости"),
     FAVORITES("favorites", "Избранное"),
-    SETTINGS("settings", "Настройки")
+    PROFILE(PROFILE_ROUTE, "Профиль")
 }
 
 @Composable
@@ -61,7 +65,7 @@ private fun AppScaffold() {
     val destinations = listOf(
         RootDestinations.NEWS,
         RootDestinations.FAVORITES,
-        RootDestinations.SETTINGS
+        RootDestinations.PROFILE
     )
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -69,17 +73,21 @@ private fun AppScaffold() {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route ?: RootDestinations.NEWS.route
             val isDetails = currentRoute.startsWith("news/details")
+            val isProfileEdit = currentRoute.startsWith(PROFILE_EDIT_ROUTE)
+            val profileTitle = stringResource(id = R.string.profile_title)
+            val profileEditTitle = stringResource(id = R.string.profile_edit_title)
             val title = when {
                 isDetails -> "Детали"
+                isProfileEdit -> profileEditTitle
                 currentRoute == RootDestinations.NEWS.route -> RootDestinations.NEWS.label
                 currentRoute == RootDestinations.FAVORITES.route -> RootDestinations.FAVORITES.label
-                currentRoute == RootDestinations.SETTINGS.route -> RootDestinations.SETTINGS.label
+                currentRoute == RootDestinations.PROFILE.route -> profileTitle
                 else -> ""
             }
             CenterAlignedTopAppBar(
                 title = { Text(title) },
                 navigationIcon = {
-                    if (isDetails) {
+                    if (isDetails || isProfileEdit) {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(Icons.Default.ArrowBack, contentDescription = "Назад")
                         }
@@ -93,7 +101,7 @@ private fun AppScaffold() {
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
                 destinations.forEach { dest ->
-                    val selected = currentRoute == dest.route
+                    val selected = currentRoute?.startsWith(dest.route) == true
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
@@ -107,7 +115,7 @@ private fun AppScaffold() {
                             when (dest) {
                                 RootDestinations.NEWS -> Icon(Icons.Default.Home, contentDescription = null)
                                 RootDestinations.FAVORITES -> Icon(Icons.Default.Bookmark, contentDescription = null)
-                                RootDestinations.SETTINGS -> Icon(Icons.Default.Settings, contentDescription = null)
+                                RootDestinations.PROFILE -> Icon(Icons.Default.Person, contentDescription = null)
                             }
                         },
                         label = { Text(dest.label) }
@@ -123,7 +131,7 @@ private fun AppScaffold() {
         ) {
             newsGraph(navController) // Используем newsGraph вместо прямого composable для news
             composable(RootDestinations.FAVORITES.route) { Text("Избранное (скоро)") }
-            composable(RootDestinations.SETTINGS.route) { Text("Настройки (скоро)") }
+            profileGraph(navController)
         }
     }
 }
